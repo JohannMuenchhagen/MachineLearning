@@ -1,0 +1,42 @@
+<hmtl>
+    <head>
+
+    </head>
+    <body>
+        <h1> Machine Learning Project</h1>
+        <br>
+        <h2>Backround</h2>
+        <p>In this project, the data is collected by accelerometers on the belt , forearm, arm and dumbbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. The target of this project is to predict the manner of execution </p>
+        <h2>Method</h2>
+        <p>
+            First I choose the variables without a Nan as training Data.<br>
+            For testing I use the same variables.<br>
+            For predicting I decided to use a tree classification like Random Forest or LDA. It turns out that LDA is the most accurate algorithm.<br>
+            So I used LDA to predicting the outcome.
+        </p>
+        <h2>Code</h2>
+        <p>
+            library(caret)<br><br>
+
+            train <- read.table("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv", sep=",") <br>
+            test <- read.table("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv", sep=",")<br><br>
+            
+            training<-subset(train, select=c(new_window,	num_window,	roll_belt,	pitch_belt,	yaw_belt,	total_accel_belt,gyros_belt_x,	gyros_belt_y,	gyros_belt_z,	accel_belt_x,	accel_belt_y,	accel_belt_z,	magnet_belt_x,	magnet_belt_y,	magnet_belt_z,	roll_arm,	pitch_arm,	yaw_arm,	total_accel_arm,
+                                                   gyros_arm_x,	gyros_arm_y,	gyros_arm_z,	accel_arm_x,	accel_arm_y,	accel_arm_z,	magnet_arm_x,	magnet_arm_y,	magnet_arm_z,roll_dumbbell,	pitch_dumbbell,	yaw_dumbbell,total_accel_dumbbell,gyros_dumbbell_x,	gyros_dumbbell_y,	gyros_dumbbell_z,	accel_dumbbell_x,	accel_dumbbell_y,	accel_dumbbell_z,
+                                                   magnet_dumbbell_x,	magnet_dumbbell_y	,magnet_dumbbell_z,	roll_forearm,	pitch_forearm,	yaw_forearm,
+                                                   gyros_forearm_x,	gyros_forearm_y,	gyros_forearm_z,	accel_forearm_x,	accel_forearm_y,	accel_forearm_z,	magnet_forearm_x,	magnet_forearm_y,	magnet_forearm_z,	classe))<br><br>
+            testing<-subset(test, select=c(new_window,	num_window,	roll_belt,	pitch_belt,	yaw_belt,	total_accel_belt,gyros_belt_x,	gyros_belt_y,	gyros_belt_z,	accel_belt_x,	accel_belt_y,	accel_belt_z,	magnet_belt_x,	magnet_belt_y,	magnet_belt_z,	roll_arm,	pitch_arm,	yaw_arm,	total_accel_arm,
+                                                 gyros_arm_x,	gyros_arm_y,	gyros_arm_z,	accel_arm_x,	accel_arm_y,	accel_arm_z,	magnet_arm_x,	magnet_arm_y,	magnet_arm_z,roll_dumbbell,	pitch_dumbbell,	yaw_dumbbell,total_accel_dumbbell,gyros_dumbbell_x,	gyros_dumbbell_y,	gyros_dumbbell_z,	accel_dumbbell_x,	accel_dumbbell_y,	accel_dumbbell_z,
+                                                 magnet_dumbbell_x,	magnet_dumbbell_y	,magnet_dumbbell_z,	roll_forearm,	pitch_forearm,	yaw_forearm,
+                                                 gyros_forearm_x,	gyros_forearm_y,	gyros_forearm_z,	accel_forearm_x,	accel_forearm_y,	accel_forearm_z,	magnet_forearm_x,	magnet_forearm_y,	magnet_forearm_z	))<br><br>
+            
+            validation <- trainControl(method="cv", number = 5)<br><br>
+            
+            modelFit  <- train(classe~.,data = training,method = "lda",trControl = validation)<br><br>
+            pred <- predict(modelFit,testing)<br><br>
+            pred <br><br>
+            Outcome: [1] B A B A C C D D A A D A E A E A A B B B
+        </p>
+    
+    </body>
+</hmtl>
