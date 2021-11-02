@@ -7,7 +7,7 @@ Since this is a classification problem, the following tree algorithms were chose
 - rpart
 - GBM
 
-## Step 1: Load the data as csv file.
+## Step 1: Download the data as csv file.
 ## Step 2: Load the required packages
 ```
 library(lattice)
@@ -24,6 +24,7 @@ testing <- read.csv("~/pml-testing.csv")
 set.seed(12345)
 ```
 ## Step 4: Clean the data
+First, the proportion of NA lines was reduced. Now the variance was increased with nearZeroVar().
 ```
 training <- training[,colMeans(is.na(training)) < 0.9]
 training <- training[,-c(1:7)] 
@@ -33,6 +34,8 @@ training <- training[,-nvz]
 ```
 
 ## Step 5: Building a training and testing dataset
+With createDataPartition() the data set was divided into a training set and a test set where 70% of the data is used for training.
+Now the data was loaded into separate array. Last the validation() method is initialized.
 ```
 inTrain  <- createDataPartition(training$classe, p=0.7, list=FALSE)
 train <- training[inTrain, ]
@@ -43,6 +46,7 @@ dim(test)
 validation <- trainControl(method="cv", number=3, verboseIter=F)
 ```
 ## Step 6: Train and test the SVMLinear model
+To train and test the model I use the code below.
 ```
 modelFit1 <- train(classe~., data=train, method="svmLinear", trControl = validation, tuneLength = 5, verbose = F)
 pred_model1 <- predict(modelFit1, test)
@@ -86,6 +90,7 @@ Balanced Accuracy      0.9224   0.8234   0.8525   0.8576   0.8321
 ```
 An accuracy of 78.64% is quite good, so lets see if the other models are more accurate.
 ## Step 7: Train and test the Random Forest model
+To train and test the model I use the code below.
 ```
 modelFit2 <- train(classe~., data=train, method="rf", trControl = validation, tuneLength = 5)
 pred_model2 <- predict(modelFit2, test)
@@ -129,6 +134,7 @@ Balanced Accuracy      0.9992   0.9969   0.9964   0.9945   0.9994
 ```
 The accuracy of 99.61% is close to perfect. 
 ## Step 8: Train and test the rpart model
+To train and test the model I use the code below.
 ```
 modelFit3 <- train(classe~., data=train, method="rpart", trControl = validation, tuneLength = 5)
 pred_model3 <- predict(modelFit3, test)
@@ -172,6 +178,7 @@ Balanced Accuracy      0.7704  0.63175  0.65778  0.66445  0.72186
 ```
 The accuracy of 54.14% is a bit better than guessing.
 ## Step 9: Train and test the GBM model
+To train and test the model I use the code below.
 ```
 modelFit4 <- train(classe~., data=train, method="gbm", trControl = validation, tuneLength = 5, verbose = F)
 pred_model4 <- predict(modelFit4, test)
@@ -226,6 +233,7 @@ The accuracy of 99.24% is close to the accuracy of the random forest model.
 ## Step 10: Predict 
 Since the Random Forest model and the GBM model have nearly identical accuracy, both models are tested separately. Perhaps the small deviation provides a different result.
 ### 1. Start with the Random Forest model.
+To predict with these model I use the predict() method.
 ```
 pred_randomForest <- predict(modelFit2, testing)
 print(pred_randomForest)
@@ -238,6 +246,7 @@ The predict values are:
 Levels: A B C D E
 ```
 ### 2. Predicton with th GBM model
+To predict with these model I use the predict() method.
 ```
 pred_gbm <- predict(modelFit4,testing)
 print(pred_gbm)
@@ -249,6 +258,7 @@ The predicted values are:
 Levels: A B C D E
 ```
 ### 3. Lets check if the results are identical
+To check these I use a simple boolean check in the print() method.
 ```
 print(pred_randomForest == pred_gbm)
 ```
